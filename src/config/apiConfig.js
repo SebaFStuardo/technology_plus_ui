@@ -14,6 +14,10 @@ const addNewCartURL = () => `${SERVICE_API_HOST}/create-cart`;
 
 const addNewProductToCartURL = () => `${SERVICE_API_HOST}/add-product-to-cart`;
 
+const createNewOrderURL = () => `${SERVICE_API_HOST}/create-order`;
+
+const sendPaymentStripe = () => `http://localhost:3001/api/checkout`;
+
 export {
   getProductsURL,
   getProductURL,
@@ -22,4 +26,6 @@ export {
   getCartURL,
   addNewCartURL,
   addNewProductToCartURL,
+  createNewOrderURL,
+  sendPaymentStripe,
 };

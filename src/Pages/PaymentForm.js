@@ -15,9 +15,12 @@ import { getBasketTotal } from "../reducer";
 import Review from "../components/ProcessOrder/Review";
 import { useStateValue } from "../StateProvider";
 import accounting from "accounting";
-import axios from "axios";
+// import axios from "axios";
 import { useState } from "react";
-import { actionTypes } from "../reducer";
+// import { actionTypes } from "../reducer";
+// import { stripePaymentMethod } from "../services/paymentMethodsServices";
+import { createNewOrder } from "../services/orderServices";
+import { deleteCookie } from "../utils/cookies";
 
 //Cargamos la conexión hacia la plataforma. Conectamos nuestro stripe
 const stripePromise = loadStripe(
@@ -51,46 +54,65 @@ const CheckoutForm = ({ backStep, nextStep }) => {
   const stripe = useStripe();
   const elements = useElements();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    //el hook useStripe nos devuelve la conexión a stripe.
-    const { error, paymentMethod } = await stripe.createPaymentMethod({
-      type: "card",
-      card: elements.getElement(CardElement), //CardElement es el formulario de la tarjeta. Así capturamos los números tecleados.
-    }); //puedo enviar el método de pago, pero todavía no sé que es lo que estoy pagando.
-    setLoading(true);
-    if (!error) {
-      console.log(paymentMethod);
-      const { id } = paymentMethod;
-      try {
-        const { data } = await axios.post(
-          "http://localhost:3001/api/checkout",
-          {
-            id,
-            amount: getBasketTotal(basket) * 100,
-          }
-        );
-        /* enviamos al backend, y la información que vamos a enviar al backend */
-        console.log(data); //lo que va a ir al backend
-        dispatch({
-          type: actionTypes.SET_PAYMENT_MESSAGE,
-          paymentMessage: data.message,
-        });
-        if (data.message === "Successful Payment") {
-          dispatch({
-            type: actionTypes.EMPTY_BASKET,
-            basket: [],
-          });
-        }
+  const handleSubmit = async (event) => {
+    // console.log("dsadsa");
+    // return false;
+    event.preventDefault();
+    // stripePaymentMethod(
+    //   event,
+    //   stripe,
+    //   basket,
+    //   setLoading,
+    //   dispatch,
+    //   elements,
+    //   nextStep
+    // );
+    const order = await createNewOrder();
 
-        elements.getElement(CardElement).clear();
-        nextStep();
-      } catch (error) {
-        console.log(error);
-        nextStep();
-      }
-      setLoading(false);
+    if (order) {
+      deleteCookie("cartId");
+      elements.getElement(CardElement).clear();
+      nextStep();
     }
+    // e.preventDefault();
+    // //el hook useStripe nos devuelve la conexión a stripe.
+    // const { error, paymentMethod } = await stripe.createPaymentMethod({
+    //   type: "card",
+    //   card: elements.getElement(CardElement), //CardElement es el formulario de la tarjeta. Así capturamos los números tecleados.
+    // }); //puedo enviar el método de pago, pero todavía no sé que es lo que estoy pagando.
+    // setLoading(true);
+    // console.log("error");
+    // if (!error) {
+    //   console.log(paymentMethod);
+    //   const { id } = paymentMethod;
+    //   try {
+    //     const { data } = await axios.post(
+    //       "http://localhost:3001/api/checkout",
+    //       {
+    //         id,
+    //         amount: getBasketTotal(basket) * 100,
+    //       }
+    //     );
+    //     /* enviamos al backend, y la información que vamos a enviar al backend */
+    //     console.log(data); //lo que va a ir al backend
+    //     dispatch({
+    //       type: actionTypes.SET_PAYMENT_MESSAGE,
+    //       paymentMessage: data.message,
+    //     });
+    //     if (data.message === "Successful Payment") {
+    //       dispatch({
+    //         type: actionTypes.EMPTY_BASKET,
+    //         basket: [],
+    //       });
+    //     }
+    //     elements.getElement(CardElement).clear();
+    //     nextStep();
+    //   } catch (error) {
+    //     console.log(error);
+    //     nextStep();
+    //   }
+    // }
+    // setLoading(false);
   };
 
   return (
@@ -105,19 +127,19 @@ const CheckoutForm = ({ backStep, nextStep }) => {
           marginTop: "1rem",
         }}
       >
-        <Button onClick={backStep} variant='outlined'>
-          Back
+        <Button onClick={backStep} variant="outlined">
+          Volver
         </Button>
         <Button
-          type='submit'
+          type="submit"
           disabled={!stripe}
-          variant='contained'
-          color='primary'
+          variant="contained"
+          color="primary"
         >
           {loading ? (
             <CircularProgress />
           ) : (
-            `Pay ${accounting.formatMoney(getBasketTotal(basket), "€")}`
+            `Pagar ${accounting.formatMoney(getBasketTotal(basket), "")}`
           )}
         </Button>
       </div>
@@ -130,8 +152,8 @@ const PaymentForm = ({ backStep, nextStep }) => {
     <>
       <Review />
       <Divider />
-      <Typography variant='h6' gutterBottom style={{ margin: "20px 0" }}>
-        Payment method
+      <Typography variant="h6" gutterBottom style={{ margin: "20px 0" }}>
+        Metodo de Pago
       </Typography>
       <Elements stripe={stripePromise}>
         {/* permite acceder al objeto Stripe desde sus hijos */}

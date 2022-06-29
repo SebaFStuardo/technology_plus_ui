@@ -3,11 +3,12 @@ import {
   addNewProductToCartURL,
   getCartURL,
 } from "../config/apiConfig";
-import { setCookie } from "../utils/cookies";
+import { getCookie, setCookie } from "../utils/cookies";
 import getRequestOptions from "./utils/getRequestOptions";
 
 const getCartService = async () => {
-  const endpoint = getCartURL();
+  const cartId = getCookie("cartId");
+  const endpoint = getCartURL(cartId);
 
   try {
     var requestOptions = getRequestOptions({ method: "GET" });
