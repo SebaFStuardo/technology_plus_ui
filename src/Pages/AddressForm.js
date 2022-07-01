@@ -11,11 +11,10 @@ import { useStateValue } from "../StateProvider";
 export default function AddressForm({ nextStep }) {
   const methods = useForm();
   const [{ shippingData }, dispatch] = useStateValue();
-
   return (
     <React.Fragment>
-      <Typography variant='h6' gutterBottom>
-        Shipping address
+      <Typography variant="h6" gutterBottom>
+        Ingresa tú Dirección
       </Typography>
       <FormProvider {...methods}>
         <form
@@ -28,12 +27,12 @@ export default function AddressForm({ nextStep }) {
           })}
         >
           <Grid container spacing={3}>
-            <AddressInput required name='firstName' label='First name' />
-            <AddressInput required name='lastName' label='Last name' />
-            <AddressInput required name='address1' label='Adress' />
-            <AddressInput required name='email' label='Email address' />
-            <AddressInput required name='city' label='City' />
-            <AddressInput required name='postCode' label='Post Code' />
+            <AddressInput required name="firstName" label="First name" />
+            <AddressInput required name="lastName" label="Last name" />
+            <AddressInput required name="address1" label="Adress" />
+            <AddressInput required name="email" label="Email address" />
+            <AddressInput required name="city" label="City" />
+            <AddressInput required name="postCode" label="Post Code" />
           </Grid>
           <div
             style={{
@@ -42,11 +41,11 @@ export default function AddressForm({ nextStep }) {
               marginTop: "1rem",
             }}
           >
-            <Button component={Link} to='/checkout-page' variant='outlined'>
-              Back to the Checkout Page
+            <Button component={Link} to="/checkout-page" variant="outlined">
+              Volver al Carrito
             </Button>
-            <Button type='submit' variant='contained' color='primary'>
-              Next
+            <Button type="submit" variant="contained" color="primary">
+              Siguiente
             </Button>
           </div>
         </form>

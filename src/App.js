@@ -10,6 +10,7 @@ import { actionTypes } from "./reducer";
 import Checkout from "./components/ProcessOrder/Checkout";
 import Products from "./Pages/Products";
 import CheckoutPage from "./Pages/CheckoutPage";
+import ForgotPassoword from "./components/ForgotPassword";
 
 function App() {
   const [{ user }, dispatch] = useStateValue();
@@ -39,6 +40,9 @@ function App() {
         <Switch>
           <Route path="/signup">
             <SignUp />
+          </Route>
+          <Route path="/forgot-password">
+            <ForgotPassoword />
           </Route>
           <Route path="/signin">
             <SignIn />

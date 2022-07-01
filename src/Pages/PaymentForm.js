@@ -11,7 +11,7 @@ import {
   useElements,
 } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js"; //trae stripe
-import { getBasketTotal } from "../reducer";
+import { actionTypes, getBasketTotal } from "../reducer";
 import Review from "../components/ProcessOrder/Review";
 import { useStateValue } from "../StateProvider";
 import accounting from "accounting";
@@ -49,77 +49,29 @@ const CARD_ELEMENT_OPTIONS = {
 };
 
 const CheckoutForm = ({ backStep, nextStep }) => {
-  const [{ basket, paymentMessage }, dispatch] = useStateValue();
+  const [{ basket, shippingData }, dispatch] = useStateValue();
   const [loading, setLoading] = useState(false);
   const stripe = useStripe();
   const elements = useElements();
 
   const handleSubmit = async (event) => {
-    // console.log("dsadsa");
-    // return false;
     event.preventDefault();
-    // stripePaymentMethod(
-    //   event,
-    //   stripe,
-    //   basket,
-    //   setLoading,
-    //   dispatch,
-    //   elements,
-    //   nextStep
-    // );
-    const order = await createNewOrder();
+    const order = await createNewOrder(shippingData);
 
     if (order) {
       deleteCookie("cartId");
       elements.getElement(CardElement).clear();
+      dispatch({
+        type: actionTypes.EMPTY_BASKET,
+        basket: [],
+      });
       nextStep();
     }
-    // e.preventDefault();
-    // //el hook useStripe nos devuelve la conexión a stripe.
-    // const { error, paymentMethod } = await stripe.createPaymentMethod({
-    //   type: "card",
-    //   card: elements.getElement(CardElement), //CardElement es el formulario de la tarjeta. Así capturamos los números tecleados.
-    // }); //puedo enviar el método de pago, pero todavía no sé que es lo que estoy pagando.
-    // setLoading(true);
-    // console.log("error");
-    // if (!error) {
-    //   console.log(paymentMethod);
-    //   const { id } = paymentMethod;
-    //   try {
-    //     const { data } = await axios.post(
-    //       "http://localhost:3001/api/checkout",
-    //       {
-    //         id,
-    //         amount: getBasketTotal(basket) * 100,
-    //       }
-    //     );
-    //     /* enviamos al backend, y la información que vamos a enviar al backend */
-    //     console.log(data); //lo que va a ir al backend
-    //     dispatch({
-    //       type: actionTypes.SET_PAYMENT_MESSAGE,
-    //       paymentMessage: data.message,
-    //     });
-    //     if (data.message === "Successful Payment") {
-    //       dispatch({
-    //         type: actionTypes.EMPTY_BASKET,
-    //         basket: [],
-    //       });
-    //     }
-    //     elements.getElement(CardElement).clear();
-    //     nextStep();
-    //   } catch (error) {
-    //     console.log(error);
-    //     nextStep();
-    //   }
-    // }
-    // setLoading(false);
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <CardElement options={CARD_ELEMENT_OPTIONS} />
-      {/* input ya preparado para ser validado que trae la biblioteca de Stripe */}
-      {/*  googlear stripe card test para acceder a las distintas tarjetas */}
       <div
         style={{
           display: "flex",

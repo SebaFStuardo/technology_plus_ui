@@ -39,6 +39,7 @@ const Navbar = () => {
   const handleAuth = () => {
     if (user) {
       auth.signOut();
+      window.sessionStorage.setItem("userId", "");
       dispatch({
         type: actionTypes.EMPTY_BASKET,
         basket: [],
@@ -51,34 +52,34 @@ const Navbar = () => {
     <>
       <CssBaseline />
       <div className={classes.root}>
-        <AppBar position='fixed' className={classes.appBar}>
+        <AppBar position="fixed" className={classes.appBar}>
           <Toolbar>
-            <Link to='/'>
+            <Link to="/">
               <IconButton>
                 <img
                   src={logo}
-                  alt='Commerce.js'
-                  height='25px'
+                  alt="Commerce.js"
+                  height="25px"
                   className={classes.image}
                 />
               </IconButton>
             </Link>
 
             <div className={classes.grow} />
-            <Typography variant='h6' color='textPrimary' component='p'>
+            <Typography variant="h6" color="textPrimary" component="p">
               Hello {user ? user.email : "Guest"}
             </Typography>
             <div className={classes.button}>
               <Link to={!user && "/signin"}>
-                <Button onClick={handleAuth} variant='outlined'>
+                <Button onClick={handleAuth} variant="outlined">
                   <strong>{user ? "Sign Out" : "Sign In"}</strong>
                 </Button>
               </Link>
 
-              <Link to='/checkout-page'>
-                <IconButton aria-label='show cart items' color='inherit'>
-                  <Badge badgeContent={basket?.length} color='secondary'>
-                    <ShoppingCart fontSize='large' color='primary' />
+              <Link to="/checkout-page">
+                <IconButton aria-label="show cart items" color="inherit">
+                  <Badge badgeContent={basket?.length} color="secondary">
+                    <ShoppingCart fontSize="large" color="primary" />
                   </Badge>
                 </IconButton>
               </Link>

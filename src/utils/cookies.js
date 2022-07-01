@@ -14,6 +14,9 @@ const setCookie = (name, value) => {
   return cookieValue;
 };
 
-const deleteCookie = () => {};
+const deleteCookie = (name) => {
+  const cookieValue = `${name}=`;
+  document.cookie = cookieValue;
+};
 
 export { getCookie, setCookie, deleteCookie };

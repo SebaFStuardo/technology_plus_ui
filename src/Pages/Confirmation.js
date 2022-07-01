@@ -1,24 +1,20 @@
 import { Button, Divider, Typography } from "@material-ui/core";
+import { Alert, AlertTitle } from "@mui/material";
 import React from "react";
 import { Link } from "react-router-dom";
 
-const Confirmation = ({ message }) => {
+const Confirmation = () => {
   return (
     <>
       <div>
-        <Typography variant='h6'>{message}</Typography>
-        <br />
-        <Divider />
-        <br />
-        <Typography variant='subtitle2' gutterBottom>
-          {message === "Successful Payment"
-            ? "Your booking reference : Rgh8787878lkj"
-            : ""}
-        </Typography>
+        <Alert severity="success">
+          <AlertTitle>Orden Confirmada</AlertTitle>
+          Tu orden ha sido registrada exitoxamente!
+        </Alert>
       </div>
       <br />
-      <Button component={Link} to='/' variant='outlined' type='button'>
-        Back to Home Page
+      <Button component={Link} to="/" variant="outlined" type="button">
+        Volver al Inicio
       </Button>
     </>
   );

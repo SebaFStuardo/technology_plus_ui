@@ -18,6 +18,11 @@ const createNewOrderURL = () => `${SERVICE_API_HOST}/create-order`;
 
 const sendPaymentStripe = () => `http://localhost:3001/api/checkout`;
 
+const createUserURL = () => `${SERVICE_API_HOST}/create-user`;
+
+const getUserWithEmailURL = (email) =>
+  `${SERVICE_API_HOST}/user?email=${email}`;
+
 export {
   getProductsURL,
   getProductURL,
@@ -28,4 +33,6 @@ export {
   addNewProductToCartURL,
   createNewOrderURL,
   sendPaymentStripe,
+  createUserURL,
+  getUserWithEmailURL,
 };

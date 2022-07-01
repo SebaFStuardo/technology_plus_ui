@@ -140,7 +140,7 @@ export default function PrimarySearchAppBar() {
         style={{ textDecoration: "none", color: "inherit" }}
       >
         <MenuItem onClick={handleAuth}>
-          {user ? "Sign Out" : "Sign In"}
+          {user ? "Cerrar Sesión" : "Iniciar Sesión"}
         </MenuItem>
       </Link>
     </Menu>

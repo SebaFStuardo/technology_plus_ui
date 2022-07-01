@@ -14,12 +14,13 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { Link as RouteLink, useHistory } from "react-router-dom";
 import { auth } from "../firebase";
+import { createUser } from "../services/userServices";
 
 function Copyright() {
   return (
-    <Typography variant='body2' color='textSecondary' align='center'>
+    <Typography variant="body2" color="textSecondary" align="center">
       {"Copyright © "}
-      <Link color='inherit' href='https://material-ui.com/'>
+      <Link color="inherit" href="https://material-ui.com/">
         Your Website
       </Link>{" "}
       {new Date().getFullYear()}
@@ -52,104 +53,120 @@ export default function SignUp() {
   const classes = useStyles();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const history = useHistory();
+
+  const saveUser = async () => {
+    const response = await createUser({
+      firstName,
+      lastName,
+      email,
+    });
+
+    if (response._id) window.sessionStorage.setItem("userId", response._id);
+    history.push("/");
+  };
 
   const signup = (e) => {
     e.preventDefault();
     auth
       .createUserWithEmailAndPassword(email, password)
       .then((auth) => {
-        console.log(auth);
         if (auth) {
-          history.push("/");
+          saveUser();
         }
       })
       .catch((err) => alert(err.message));
   };
 
   return (
-    <Container component='main' maxWidth='xs'>
+    <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
-        <Typography component='h1' variant='h5'>
-          Sign up
+        <Typography component="h1" variant="h5">
+          Registrate
         </Typography>
         <form className={classes.form} noValidate>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
-                autoComplete='fname'
-                name='firstName'
-                variant='outlined'
+                value={firstName}
+                autoComplete="fname"
+                onChange={(e) => setFirstName(e.target.value)}
+                name="firstName"
+                variant="outlined"
                 required
                 fullWidth
-                id='firstName'
-                label='First Name'
+                id="firstName"
+                label="First Name"
                 autoFocus
               />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
-                variant='outlined'
+                value={lastName}
+                variant="outlined"
+                onChange={(e) => setLastName(e.target.value)}
                 required
                 fullWidth
-                id='lastName'
-                label='Last Name'
-                name='lastName'
-                autoComplete='lname'
+                id="lastName"
+                label="Last Name"
+                name="lastName"
+                autoComplete="lname"
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                variant='outlined'
+                variant="outlined"
                 required
                 fullWidth
-                id='email'
-                label='Email Address'
-                name='email'
-                autoComplete='email'
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                variant='outlined'
+                variant="outlined"
                 required
                 fullWidth
-                name='password'
-                label='Password'
-                type='password'
-                id='password'
-                autoComplete='current-password'
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="current-password"
               />
             </Grid>
             <Grid item xs={12}>
               <FormControlLabel
-                control={<Checkbox value='allowExtraEmails' color='primary' />}
-                label='I want to receive inspiration, marketing promotions and updates via email.'
+                control={<Checkbox value="allowExtraEmails" color="primary" />}
+                label="I want to receive inspiration, marketing promotions and updates via email."
               />
             </Grid>
           </Grid>
           <Button
-            type='submit'
+            type="submit"
             fullWidth
-            variant='contained'
-            color='primary'
+            variant="contained"
+            color="primary"
             className={classes.submit}
             onClick={signup}
           >
-            Sign Up
+            Registrarse
           </Button>
-          <Grid container justify='flex-end'>
+          <Grid container justify="flex-end">
             <Grid item>
-              <RouteLink to='/signin'>
-                Already have an account? Sign in
+              <RouteLink to="/signin">
+                Ya estas registrado? has click aquí
               </RouteLink>
             </Grid>
           </Grid>

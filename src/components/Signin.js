@@ -14,12 +14,13 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { Link as RouteLink, useHistory } from "react-router-dom";
 import { auth } from "../firebase";
+import { getUserWithEmail } from "../services/userServices";
 
 function Copyright() {
   return (
-    <Typography variant='body2' color='textSecondary' align='center'>
+    <Typography variant="body2" color="textSecondary" align="center">
       {"Copyright © "}
-      <Link color='inherit' href='https://material-ui.com/'>
+      <Link color="inherit" href="https://material-ui.com/">
         Your Website
       </Link>{" "}
       {new Date().getFullYear()}
@@ -54,73 +55,82 @@ export default function SignIn() {
   const history = useHistory();
   const classes = useStyles();
 
+  const setSessionStorage = async () => {
+    const response = await getUserWithEmail(email);
+    if (response._id) window.sessionStorage.setItem("userId", response._id);
+
+    history.push("/");
+  };
+
   const signin = (e) => {
     e.preventDefault();
     auth
       .signInWithEmailAndPassword(email, password)
-      .then((auth) => history.push("/"))
+      .then((auth) => {
+        setSessionStorage();
+      })
       .catch((err) => alert(err.message));
   };
 
   return (
-    <Container component='main' maxWidth='xs'>
+    <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
-        <Typography component='h1' variant='h5'>
-          Sign in
+        <Typography component="h1" variant="h5">
+          Iniciar Sesión
         </Typography>
         <form className={classes.form} noValidate>
           <TextField
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            variant='outlined'
-            margin='normal'
+            variant="outlined"
+            margin="normal"
             required
             fullWidth
-            id='email'
-            label='Email Address'
-            name='email'
-            autoComplete='email'
+            id="email"
+            label="Email Address"
+            name="email"
+            autoComplete="email"
             autoFocus
           />
           <TextField
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            variant='outlined'
-            margin='normal'
+            variant="outlined"
+            margin="normal"
             required
             fullWidth
-            name='password'
-            label='Password'
-            type='password'
-            id='password'
-            autoComplete='current-password'
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            autoComplete="current-password"
           />
           <FormControlLabel
-            control={<Checkbox value='remember' color='primary' />}
-            label='Remember me'
+            control={<Checkbox value="remember" color="primary" />}
+            label="Remember me"
           />
           <Button
             onClick={signin}
-            type='submit'
+            type="submit"
             fullWidth
-            variant='contained'
-            color='primary'
+            variant="contained"
+            color="primary"
             className={classes.submit}
           >
-            Sign In
+            Iniciar Sesión
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link href='#' variant='body2'>
-                Forgot password?
+              <Link href="/forgot-password" variant="body2">
+                Olvidadeste tu contraseña?
               </Link>
             </Grid>
             <Grid item>
-              <RouteLink to='/signup'>
+              <RouteLink to="/signup">
                 {"Don't have an account? Sign Up"}
               </RouteLink>
             </Grid>

@@ -3,15 +3,18 @@ import { getCookie, setCookie } from "../utils/cookies";
 import { getCartService } from "./cartServices";
 import getRequestOptions from "./utils/getRequestOptions";
 
-const createNewOrder = async () => {
+const createNewOrder = async (shippingData) => {
   try {
     const endpoint = createNewOrderURL();
 
     const getCurrentCart = await getCartService();
     const userId = window.sessionStorage.getItem("userId") || 123;
+    const getAddress = shippingData;
+
     const data = {
       products: getCurrentCart.products,
       payment_method: "Tarjeta de Credito",
+      address: getAddress,
       id_user: userId,
       id_cart: getCurrentCart._id,
     };

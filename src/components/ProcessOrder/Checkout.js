@@ -12,14 +12,12 @@ import useStyles from "./styles";
 import AddressForm from "../../Pages/AddressForm";
 import PaymentForm from "../../Pages/PaymentForm";
 import Confirmation from "../../Pages/Confirmation";
-import { useStateValue } from "../../StateProvider";
 
-const steps = ["Shipping address", "Payment details"];
+const steps = ["Datos Dirección", "Pago"];
 
 const Checkout = () => {
   const classes = useStyles();
   const [activeStep, setActivestep] = useState(0);
-  const [{ paymentMessage }, dispatch] = useStateValue();
 
   const nextStep = () => setActivestep((prevActivestep) => prevActivestep + 1);
   const backStep = () => setActivestep((prevActivestep) => prevActivestep - 1);
@@ -36,7 +34,7 @@ const Checkout = () => {
       <CssBaseline />
       <main className={classes.layout}>
         <Paper className={classes.paper}>
-          <Typography component='h1' variant='h4' align='center'>
+          <Typography component="h1" variant="h4" align="center">
             Checkout
           </Typography>
           <Stepper activeStep={activeStep} className={classes.stepper}>
@@ -47,7 +45,7 @@ const Checkout = () => {
             ))}
           </Stepper>
           {activeStep === steps.length ? (
-            <Confirmation message={paymentMessage} />
+            <Confirmation />
           ) : (
             <Form step={activeStep} />
           )}
