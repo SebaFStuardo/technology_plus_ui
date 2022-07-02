@@ -11,9 +11,10 @@ import Checkout from "./components/ProcessOrder/Checkout";
 import Products from "./Pages/Products";
 import CheckoutPage from "./Pages/CheckoutPage";
 import ForgotPassoword from "./components/ForgotPassword";
+import Product from "./Pages/Product";
 
 function App() {
-  const [{ user }, dispatch] = useStateValue();
+  const [{}, dispatch] = useStateValue();
 
   useEffect(() => {
     console.log("currentUser: ", auth.currentUser);
@@ -52,6 +53,9 @@ function App() {
           </Route>
           <Route path="/checkout">
             <Checkout />
+          </Route>
+          <Route path="/product">
+            <Product />
           </Route>
           <Route path="/">
             <Products />

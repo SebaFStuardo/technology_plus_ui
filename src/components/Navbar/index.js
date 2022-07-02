@@ -18,6 +18,7 @@ import { Link, useHistory } from "react-router-dom";
 import { auth } from "../../firebase";
 import { actionTypes } from "../../reducer";
 import { ShoppingCart } from "@material-ui/icons";
+import { getProductsService } from "../../services/productServices";
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -85,7 +86,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function PrimarySearchAppBar() {
   const classes = useStyles();
-  const [{ basket, user }, dispatch] = useStateValue();
+  const [{ basket, user, products }, dispatch] = useStateValue();
   const history = useHistory();
 
   const handleAuth = () => {
@@ -187,6 +188,30 @@ export default function PrimarySearchAppBar() {
     </Menu>
   );
 
+  const filterProductsSearch = async (event) => {
+    const productSearch = event?.target?.value;
+    console.log("productSearch: ", typeof productSearch);
+
+    if (!productSearch) {
+      const response = await getProductsService();
+
+      dispatch({
+        type: actionTypes.ADD_TO_PRODUCT,
+        item: response,
+      });
+      return;
+    }
+
+    const newProducts = products.filter((product) =>
+      product.productName.includes(productSearch)
+    );
+
+    dispatch({
+      type: actionTypes.ADD_TO_PRODUCT,
+      item: newProducts,
+    });
+  };
+
   return (
     <div className={classes.grow}>
       <AppBar position="static">
@@ -210,6 +235,7 @@ export default function PrimarySearchAppBar() {
             </div>
             <InputBase
               placeholder="Search…"
+              onChange={filterProductsSearch}
               classes={{
                 root: classes.inputRoot,
                 input: classes.inputInput,

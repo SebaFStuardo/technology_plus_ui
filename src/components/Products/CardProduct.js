@@ -15,6 +15,7 @@ import {
 import { useStateValue } from "../../StateProvider";
 import { actionTypes } from "../../reducer";
 import accounting from "accounting";
+import { Link } from "react-router-dom";
 
 export default function CardProduct({ product }) {
   const {
@@ -44,25 +45,33 @@ export default function CardProduct({ product }) {
 
   return (
     <Card sx={{ maxWidth: 345 }}>
-      <CardMedia component="img" height="250" image={image} alt={productName} />
-      <CardContent>
-        <Typography gutterBottom variant="h6" component="div" align="left">
-          {productName}
-        </Typography>
-        <Typography variant="body2" color="text.secondary" align="left">
-          {brandName}
-        </Typography>
-        <Typography variant="body2" color="text.secondary" align="left">
-          {`$ ${accounting.formatNumber(price)}`}
-        </Typography>
-      </CardContent>
-
+      <Link
+        to={`/product/${product._id}`}
+        style={{ textDecoration: "none", color: "inherit" }}
+      >
+        <CardMedia
+          component="img"
+          height="250"
+          image={image}
+          alt={productName}
+        />
+        <CardContent>
+          <Typography gutterBottom variant="h6" component="div" align="left">
+            {productName}
+          </Typography>
+          <Typography variant="body2" color="text.secondary" align="left">
+            {brandName}
+          </Typography>
+          <Typography variant="body2" color="text.secondary" align="left">
+            {`$ ${accounting.formatNumber(price)}`}
+          </Typography>
+        </CardContent>
+      </Link>
       <center>
         <Button variant="contained" onClick={addToCart}>
           Añadir al carrito
         </Button>
       </center>
-
       <CardActions />
     </Card>
   );

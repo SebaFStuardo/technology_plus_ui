@@ -3,6 +3,7 @@ export const initialState = {
   user: null,
   shippingData: {},
   paymentMessage: "",
+  products: [],
 };
 
 export const actionTypes = {
@@ -12,6 +13,7 @@ export const actionTypes = {
   SET_USER: "SET_USER",
   SET_SHIPPINGDATA: "SET_SHIPPINGDATA",
   SET_PAYMENT_MESSAGE: "SET_PAYMENT_MESSAGE",
+  ADD_TO_PRODUCT: "ADD_TO_PRODUCT",
 };
 
 export const getBasketTotal = (basket) =>
@@ -58,6 +60,11 @@ const reducer = (state, action) => {
       return {
         ...state,
         paymentMessage: action.paymentMessage,
+      };
+    case "ADD_TO_PRODUCT":
+      return {
+        ...state,
+        products: action.item,
       };
     default:
       return state;

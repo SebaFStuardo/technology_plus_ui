@@ -2,8 +2,11 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Grid, CssBaseline } from "@material-ui/core";
 // import products from "../product-data";
 import Product from "../components/Products/CardProduct";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { getProductsService } from "../services/productServices";
+import { useStateValue } from "../StateProvider";
+import { actionTypes } from "../reducer";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -12,14 +15,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Products = () => {
-  const [products, setProducts] = useState([]);
+  const [{ products }, dispatch] = useStateValue();
   const classes = useStyles();
 
   useEffect(() => {
     const getProducts = async () => {
       const response = await getProductsService();
-      console.log("response: ", response);
-      setProducts(response);
+
+      dispatch({
+        type: actionTypes.ADD_TO_PRODUCT,
+        item: response,
+      });
     };
 
     getProducts();
@@ -32,7 +38,7 @@ const Products = () => {
         <Grid container spacing={3}>
           {products.map((product) => (
             <Grid item xs={12} sm={6} md={4} lg={3}>
-              <Product key={product.id} product={product} />
+              <Product key={product._id} product={product} />
             </Grid>
           ))}
         </Grid>
