@@ -57,7 +57,9 @@ export default function SignIn() {
 
   const setSessionStorage = async () => {
     const response = await getUserWithEmail(email);
-    if (response._id) window.sessionStorage.setItem("userId", response._id);
+    if (response._id) {
+      window.sessionStorage.setItem("userId", response._id);
+    }
 
     history.push("/");
   };

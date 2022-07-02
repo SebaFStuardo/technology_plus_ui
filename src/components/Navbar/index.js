@@ -134,8 +134,6 @@ export default function PrimarySearchAppBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Perfil</MenuItem>
-      <MenuItem onClick={handleMenuClose}>Mi Cuenta</MenuItem>
       <Link
         to={!user && "/signin"}
         style={{ textDecoration: "none", color: "inherit" }}
@@ -250,16 +248,7 @@ export default function PrimarySearchAppBar() {
                 Hello {user ? user.email : "Guest"}
               </Typography>
             </IconButton>
-            <IconButton aria-label="show 4 new mails" color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <MailIcon />
-              </Badge>
-            </IconButton>
-            <IconButton aria-label="show 17 new notifications" color="inherit">
-              <Badge badgeContent={17} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
+
             <Link to="/checkout-page">
               <IconButton aria-label="show cart items" color="inherit">
                 <Badge badgeContent={basket?.length} color="secondary">

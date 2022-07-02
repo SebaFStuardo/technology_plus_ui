@@ -41,7 +41,7 @@ export default function CardContentProduct({ product }) {
       <Grid container style={{ marginTop: "20px" }} spacing={2}>
         <Card
           style={{
-            height: "600px",
+            height: "auto",
             marginLeft: "auto",
             marginRight: "auto",
             marginTop: "20px",

@@ -11,7 +11,7 @@ import {
   useElements,
 } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js"; //trae stripe
-import { actionTypes, getBasketTotal } from "../reducer";
+import { getBasketTotal } from "../reducer";
 import Review from "../components/ProcessOrder/Review";
 import { useStateValue } from "../StateProvider";
 import accounting from "accounting";
@@ -49,23 +49,27 @@ const CARD_ELEMENT_OPTIONS = {
 };
 
 const CheckoutForm = ({ backStep, nextStep }) => {
-  const [{ basket, shippingData }, dispatch] = useStateValue();
+  const [{ basket, paymentMessage, shippingData }, dispatch] = useStateValue();
   const [loading, setLoading] = useState(false);
   const stripe = useStripe();
   const elements = useElements();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const order = await createNewOrder(shippingData);
+    // //el hook useStripe nos devuelve la conexión a stripe.
+    const { error, paymentMethod } = await stripe.createPaymentMethod({
+      type: "card",
+      card: elements.getElement(CardElement), //CardElement es el formulario de la tarjeta. Así capturamos los números tecleados.
+    }); //puedo enviar el método de pago, pero todavía no sé que es lo que estoy pagando.
 
-    if (order) {
-      deleteCookie("cartId");
-      elements.getElement(CardElement).clear();
-      dispatch({
-        type: actionTypes.EMPTY_BASKET,
-        basket: [],
-      });
-      nextStep();
+    if (!error) {
+      const order = await createNewOrder(shippingData);
+
+      if (order) {
+        deleteCookie("cartId");
+        elements.getElement(CardElement).clear();
+        nextStep();
+      }
     }
   };
 
